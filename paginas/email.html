@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade Suspeita</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fafafa;
+            color: #262626;
+        }
+
+        /* Add new style for company logo */
+        .company-logo {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #dbdbdb;
+        }
+
+        .company-logo img {
+            max-height: 40px;
+            width: auto;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+        }
+
+        .profile {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-pic {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            margin-bottom: 12px;
+        }
+
+        .username {
+            font-size: 16px;
+            font-weight: 600;
+            color: #262626;
+        }
+
+        .alert-box {
+            padding: 20px;
+            background-color: #fafafa;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .map-container {
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .map-image {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        /* New styles for the location pin and balloon */
+        .location-pin {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .location-balloon {
+            position: absolute;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, -100%);
+            white-space: nowrap;
+            font-size: 18px;
+            z-index: 2;
+            font-weight: 500;
+            border: 1px solid rgba(0,0,0,0.1);
+            color: #262626;
+        }
+
+        .location-balloon:after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 12px solid white;
+        }
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid white;
+        }
+        .pin-icon {
+            width: 36px;
+            height: 36px;
+            color: #0095f6;
+        }
+        
+        /* Add new styles for location marker */
+        .location-marker {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 148, 246, 0.393);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.95);
+                box-shadow: 0 0 0 0 rgba(0, 149, 246, 0.4);
+            }
+            
+            70% {
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 0 0 0 25px rgba(0, 149, 246, 0);
+            }
+            
+            100% {
+                transform: translate(-50%, -50%) scale(0.95);
+                box-shadow: 0 0 0 0 rgba(0, 149, 246, 0);
+            }
+        }
+
+        /* Adjust pin position to be above the marker */
+        .location-pin {
+            z-index: 3;
+        }
+
+        .location-info {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            padding: 12px 0;
+            margin: 8px 0;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .primary-button {
+            background-color: #0095f6;
+            color: white;
+        }
+
+        .secondary-button {
+            background-color: #fafafa;
+            color: #262626;
+            border: 1px solid #dbdbdb;
+        }
+
+        .info-text {
+            color: #8e8e8e;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Add company logo section -->
+        <div class="company-logo">
+            <img src="logo.png" alt="Logo da Empresa">
+        </div>
+
+        <div class="profile">
+            <img src="avatar.jpg" alt="Foto de Perfil" class="profile-pic">
+            <div class="username">@fabycardosoferreiracursos</div>
+        </div>
+
+        <div class="alert-box">
+            <h2 style="margin-top: 0;">Login Suspeito Detectado!</h2>
+            <p class="info-text">Detectamos uma tentativa de acesso incomum na sua conta. Recomendamos que redefina sua senha imediatamente para proteger sua conta.</p>
+        </div>
+        <div class="map-container">
+            <img src="mapa-palmas.jpg" alt="Mapa de localização" class="map-image">
+            
+            <div class="location-balloon">
+                <span id="balloon-date"></span>
+            </div>
+            <div class="location-marker"></div>
+            <div class="location-pin">
+                <svg class="pin-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C7.802 0 4 3.403 4 7.602C4 11.8 7.469 16.812 12 24C16.531 16.812 20 11.8 20 7.602C20 3.403 16.199 0 12 0ZM12 11C10.343 11 9 9.657 9 8C9 6.343 10.343 5 12 5C13.657 5 15 6.343 15 8C15 9.657 13.657 11 12 11Z"/>
+                </svg>
+            </div>
+            
+            <div class="location-info">
+                <p><strong>Data:</strong> <span id="info-date"><!-- Data será inserida via JavaScript --></span></p>
+                <p><strong>Dispositivo:</strong> iPhone 14 Pro</p>
+                <p><strong>Localização:</strong> Palmas, Tocantins, Brasil</p>
+            </div>
+        </div>
+
+        <a href="security-warning.html" class="button primary-button">Fui eu</a>
+        <a href="security-warning.html" class="button secondary-button">Não fui eu</a>
+
+        <p class="info-text" style="text-align: center;">Se não foi você, recomendamos que altere sua senha imediatamente.</p>
+    </div>
+
+    <script>
+        // Pegar a data atual e subtrair 10 minutos
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - 10);
+        const formattedDate = now.toLocaleDateString('pt-BR') + ' às ' + 
+                             now.getHours().toString().padStart(2, '0') + ':' + 
+                             now.getMinutes().toString().padStart(2, '0');
+        document.getElementById('balloon-date').textContent = formattedDate;
+        document.getElementById('info-date').textContent = formattedDate;
+    </script>
+</body>
+</html>
